@@ -1,7 +1,8 @@
 ---
 title: DOOM in your browser
-image: 127.0.0.1:5055/wmn-doom:0.1@sha256:fee8a3f81a166f0dbd865fb54ca56de34ea0bfc91c7943f60e06a44216f14046
+image: 127.0.0.1:5055/wmn-doom:0.3@sha256:fc06936e541dda629920ffb89579b38ed160fe101a6382fa6a3e1d32c933682a
 memory: 1024
+cpus: 4
 ---
 
 # DOOM in your browser

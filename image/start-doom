@@ -1,17 +1,17 @@
 #!/bin/sh
-# Starts the game in the background: Xvnc on display :1 (VNC on 127.0.0.1:5900, no password: nothing outside this
-# machine can reach it), crispy-doom on that display, and websockify on port 8080 (the noVNC page and the VNC
-# WebSocket). Logs go to /tmp/doom-*.log. Running it again while the game runs does nothing.
+# Starts the game in the background: Xvnc on display :1 (VNC on the socket file /tmp/doom-vnc.sock, no TCP port and no
+# password: nothing outside this machine can reach it), crispy-doom on that display, and websockify on port 8080 (the
+# noVNC page and the VNC WebSocket), the one port the page shows. Logs go to /tmp/doom-*.log. Running it again while the game runs does nothing.
 set -eu
 if [ -e /tmp/.X1-lock ] && kill -0 "$(cat /tmp/.X1-lock 2>/dev/null | tr -d ' ')" 2>/dev/null; then echo "DOOM is already running"; exit 0; fi
-rm -f /tmp/.X1-lock /tmp/.X11-unix/X1
+rm -f /tmp/.X1-lock /tmp/.X11-unix/X1 /tmp/doom-vnc.sock
 export HOME="${HOME:-/root}"
 cfg="$HOME/.local/share/crispy-doom"
 mkdir -p "$cfg"
 [ -e "$cfg/crispy-doom.cfg" ] || cp /opt/doom/cfg/crispy-doom.cfg "$cfg/"
 [ -e "$cfg/default.cfg" ] || cp /opt/doom/cfg/default.cfg "$cfg/"
-nohup Xvnc :1 -geometry 640x400 -depth 24 -SecurityTypes None -localhost -rfbport 5900 -AlwaysShared >/tmp/doom-xvnc.log 2>&1 &
+nohup Xvnc :1 -geometry 320x200 -depth 24 -SecurityTypes None -rfbport -1 -rfbunixpath /tmp/doom-vnc.sock -AlwaysShared >/tmp/doom-xvnc.log 2>&1 &
 i=0; until [ -e /tmp/.X11-unix/X1 ]; do i=$((i+1)); [ $i -lt 300 ] || { echo "Xvnc did not start"; cat /tmp/doom-xvnc.log; exit 1; }; sleep 0.1; done
-DISPLAY=:1 nohup /usr/games/crispy-doom -iwad /opt/doom/doom1.wad -nosound -window -geometry 640x400 -config "$cfg/default.cfg" -extraconfig "$cfg/crispy-doom.cfg" >/tmp/doom-game.log 2>&1 &
-nohup websockify --web /opt/doom/web 8080 127.0.0.1:5900 >/tmp/doom-websockify.log 2>&1 &
+DISPLAY=:1 nohup /usr/games/crispy-doom -iwad /opt/doom/doom1.wad -nosound -window -geometry 320x200 -config "$cfg/default.cfg" -extraconfig "$cfg/crispy-doom.cfg" >/tmp/doom-game.log 2>&1 &
+nohup websockify --web /opt/doom/web --unix-target=/tmp/doom-vnc.sock 8080 >/tmp/doom-websockify.log 2>&1 &
 echo "DOOM started"

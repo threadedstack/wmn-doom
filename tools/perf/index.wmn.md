@@ -1,6 +1,6 @@
 ---
 title: DOOM speed
-image: 127.0.0.1:5055/wmn-doom:0.2@sha256:99c581bdf3add1758a590a3b08b89de2a48e6b32c717e28c805e98e8360623ce
+image: ghcr.io/threadedstack/wmn-doom:0.3@sha256:fc06936e541dda629920ffb89579b38ed160fe101a6382fa6a3e1d32c933682a
 memory: 1024
 ---
 

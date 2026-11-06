@@ -22,14 +22,15 @@ Reported as [threadedstack/wmn#51](https://github.com/threadedstack/wmn/issues/5
 | Piece | Choice | Why |
 |---|---|---|
 | Image | `image/Dockerfile` (credits B0nam/DOCKER-DOOM), linux/arm64 | The browser machine is arm64; the published image is amd64 only. |
-| Game | Debian trixie's own `crispy-doom` package, `-nosound`, 640x400 window | Nothing to compile; no build tools in the final layer. |
+| Game | Debian trixie's own `crispy-doom` package, `-nosound`, a 320x200 window (DOOM's own size; noVNC scales it up in the page) | Nothing to compile; no build tools in the final layer. 320x200 is twice as fast as 640x400 here (PERFORMANCE.md). |
 | WAD | `doom1.wad` (shareware, freely redistributable) from Debian's archive, checked by sha256 | The same file B0nam's image uses. |
 | Display | `Xvnc` (TigerVNC: X server and VNC server in one process) on a socket file, no TCP port, no password | One process; only port 8080 shows on the page; nothing outside the machine can reach it. |
 | Web | `websockify --web` on port 8080: the noVNC page and the VNC WebSocket on one port | One port for the port card. |
 | noVNC | v1.6.0 `core/rfb.js` bundled with esbuild into one HTML file (inline module script) | A page preview has no network of its own, so it cannot load noVNC's many module files. |
-| Page | `notebook/index.wmn.md`, published with `wmn publish --runnable` | The same as the Claude Code demo. |
+| Page | `notebook/index.wmn.md`, published with `wmn publish --runnable`, `memory: 1024`, `cpus: 4` | The same as the Claude Code demo. 4 CPUs double the speed (WebKit is capped at 2). |
+| Image home | `ghcr.io/threadedstack/wmn-doom:0.3` (public package; the repo stays private) | `wmn publish` pulls it to bake the site, on this Mac and on machine A. |
 
-The image is pinned by tag and digest in the notebook's `image:` line.
+The image is pinned by tag and digest in the notebook's `image:` line: `ghcr.io/threadedstack/wmn-doom:0.3@sha256:fc06936e541dda629920ffb89579b38ed160fe101a6382fa6a3e1d32c933682a`.
 
 ## Sizes
 
@@ -39,7 +40,7 @@ The image is pinned by tag and digest in the notebook's `image:` line.
 
 1. The page explains what runs where, and has one **Run** block.
 2. Run starts the machine, then the game, the VNC server and noVNC. The block waits until noVNC answers and says "DOOM is ready".
-3. A **port 8080** card opens under the block with DOOM's attract demo running in it.
+3. A **port 8080** card opens under the block with DOOM's title and attract demo running in it (16 s after Run in Chromium, 18 s in Firefox, 26 s in WebKit).
 4. Click the game, then play with the keyboard: arrows move, Ctrl fires, Space opens doors, Enter and Esc work the menus. Sound is off.
 
 ## Not in scope

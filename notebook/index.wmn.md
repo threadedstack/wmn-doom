@@ -1,6 +1,6 @@
 ---
 title: DOOM in your browser
-image: 127.0.0.1:5055/wmn-doom:0.3@sha256:fc06936e541dda629920ffb89579b38ed160fe101a6382fa6a3e1d32c933682a
+image: ghcr.io/threadedstack/wmn-doom:0.3@sha256:fc06936e541dda629920ffb89579b38ed160fe101a6382fa6a3e1d32c933682a
 memory: 1024
 cpus: 4
 ---

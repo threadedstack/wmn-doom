@@ -13,6 +13,18 @@ Measured on machine B (Mac, Apple silicon, 16 GB) on 2026-11-06, with Playwright
 
 The Claude Code demo's site is about the same size (its image is 420 MB).
 
+## Final check: the Firebase build from wmn main (2026-11-06)
+
+wmn main at `b8ffee400` (P525 landed), built with `./build.sh <out> --host firebase --base /` (what `deploy.sh` runs), served by `serve.ts`, driven by `tools/drive.mjs ... play` one browser at a time. Screenshots are in `shots/`.
+
+| Browser | Ready after Run | First game frame after Run | New pictures a second in game | Keys work | Memory of the whole browser |
+|---|---|---|---|---|---|
+| Chromium | 14.1 s | 14.1 s | 33.6 | yes | 5.3 GB |
+| Firefox | 17.1 s | 17.1 s | 25.4 | yes | 5.8 GB |
+| WebKit | 24.1 s | 24.1 s | 15.3 | yes | not readable (119 MB counted, see below) |
+
+"Keys work" means the picture changed after the driver walked, turned and fired. The memory numbers are higher than in the earlier runs below; both are the driver's count of every process it started.
+
 ## The setting kept: 320x200, 4 CPUs
 
 | Browser | Ready after Run | First game frame after Run | New pictures a second in game | Memory of the whole browser |

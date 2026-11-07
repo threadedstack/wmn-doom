@@ -2,11 +2,11 @@
 
 DOOM played in your browser. One wmn document (`notebook/index.wmn.md`) is published as a runnable page. Pressing **Run** starts a Linux machine in the tab (wmd-web, WebAssembly) from the Docker image `ghcr.io/threadedstack/wmn-doom:0.3`. The machine runs crispy-doom with the shareware episode, a VNC server and noVNC on port 8080. The page shows port 8080 in a port card under the block, so you see the game through noVNC and play it with the keyboard. Nothing runs on a server.
 
-It needs wmn with package P525 (threadedstack/wmn issue #51): published pages show a port of their machine, and a previewed page's WebSocket reaches the machine through the tab.
+It needs wmn with package P525 (threadedstack/wmn issue #51, on wmn main as commit `b8ffee400`): published pages show a port of their machine, and a previewed page's WebSocket reaches the machine through the tab.
 
 ## Run it locally
 
-Needs a wmn release with P525 (`WMN_BIN` pointing at it, or `wmn` on PATH), its engine folder (`WMN_ENGINE_DIR`, default the app's own) and Bun.
+Needs wmn with P525: the first release after `b8ffee400`, or wmn main run from source (`WMN_BIN` pointing at it, or `wmn` on PATH). Also its engine folder (`WMN_ENGINE_DIR`, default the app's own) and Bun.
 
 ```
 ./build.sh                                   # writes ../wmn-doom-site (about 600 MB: the image is baked in)
@@ -15,7 +15,7 @@ bun serve.ts ../wmn-doom-site 31810          # serves it with the isolation head
 
 Open http://127.0.0.1:31810/ in Chrome, Firefox or Safari, then:
 
-1. Press **Run**. The machine starts, then the game. The block says "DOOM is ready" after about 16 s (Chromium), 18 s (Firefox) or 26 s (Safari).
+1. Press **Run**. The machine starts, then the game. The block says "DOOM is ready" after about 14 s (Chromium), 17 s (Firefox) or 24 s (Safari).
 2. The **port 8080** card under the block shows DOOM. Click the game to give it your keys.
 3. Arrows move, Ctrl fires, Space opens doors, Enter and Esc work the menus, 1 to 7 change weapon. Sound is off.
 
@@ -29,7 +29,7 @@ Machine B (this repo's author) cannot deploy to Firebase or change DNS. Machine 
    ```
    gh repo clone threadedstack/wmn-doom && cd wmn-doom && git checkout <commit>
    ```
-2. Use the wmn release named in the hand-off issue (the first one with P525). Point `WMN_BIN` at its standalone binary and `WMN_ENGINE_DIR` at the engine folder built for that release's wmd-web pin (machine A's `~/Library/Application Support/wmn/engine`):
+2. Use the wmn release named in the hand-off issue (the first one after `b8ffee400`, which has P525). Point `WMN_BIN` at its standalone binary and `WMN_ENGINE_DIR` at the engine folder built for that release's wmd-web pin (machine A's `~/Library/Application Support/wmn/engine`):
    ```
    export WMN_BIN=<path to wmn-<version>-macos-arm64>
    export WMN_ENGINE_DIR="$HOME/Library/Application Support/wmn/engine"
